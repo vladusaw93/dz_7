@@ -1,0 +1,9 @@
+.footer{
+    width: 320px;
+    height: 320px;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px 0;
+    background-color: rgba(175, 185, 236, 0.7);
+}
+
