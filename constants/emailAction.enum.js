@@ -3,5 +3,6 @@ module.exports = {
     NEWPRODUCT: `1`,
     DELETEDPRODUCT: `2`,
     DELETEDUSER: `3`,
-    UPDATEPRODUCT: `4`
+    UPDATEPRODUCT: `4`,
+    NOPHOTO: `5`,
 }

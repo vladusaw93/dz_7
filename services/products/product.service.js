@@ -10,12 +10,10 @@ module.exports = {
         return products;
     },
 
-
     getOneProduct: async (productId) => {
         const ProductModel = DataBase.getModels(PRODUCT);
         return ProductModel.findByPk(productId);
     },
-
 
     AddProduct: (product) => {
         const ProductModel = DataBase.getModels(PRODUCT);
@@ -34,8 +32,8 @@ module.exports = {
 
     UpdateProduct: (idOfProduct, paramsToUpdate) => {
         const {name, code, title, price, kupon} = paramsToUpdate;
-        const ProductModel = DataBase.getModels(`Product`);
-       const updatedProd = ProductModel.update({
+        const ProductModel = DataBase.getModels(PRODUCT);
+        const updatedProd = ProductModel.update({
                 name: name,
                 code: code,
                 title: title,
@@ -48,6 +46,20 @@ module.exports = {
                 }
             });
         return updatedProd;
-    }
+    },
+    updateProductById: (id,newProductFields) => {
+        const ProductModel = DataBase.getModels(PRODUCT);
+
+        return ProductModel.update(
+            newProductFields,
+            {where: {id}},
+        )
+    },
+    getProductByParams: (params) => {
+        const ProductModel = DataBase.getModels(PRODUCT);
+        return ProductModel.findAll({
+            where: params
+        })
+    },
 }
 

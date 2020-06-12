@@ -34,5 +34,14 @@ module.exports = {
         return userModel.create(newUser);
     },
 
+    updateUserById: (id, newUserFields) => {
+        const userModel = DataBase.getModels(USER);
+
+        return userModel.update(
+            newUserFields,
+            { where: { id } },
+        )
+    },
+
 
 }

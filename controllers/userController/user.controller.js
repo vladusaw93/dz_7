@@ -1,6 +1,10 @@
 const {userServices, mailerservices} = require(`../../services`);
 const {hasher} = require(`../../helpers`);
 const {errorHandler, errors: {NOUSER}} = require(`../../errors`);
+const uuid = require('uuid').v1();
+const path = require('path');
+const fsExtra = require('fs-extra').promises;
+
 
 const {
     errorsStatusEnum: {UNAUTHORIZED},
@@ -50,26 +54,36 @@ module.exports = {
         res.end();
     },
 
+
     creatUser: async (req, res) => {
         try {
             const newUser = req.body;
+            const [avatar] = req.photos;
             newUser.password = await hasher(newUser.password);
 
-            await userServices.creatUser(newUser);
-            await mailerservices.sendMails(newUser.email, REGUSER, {
-                userName: newUser.name,
-                login: newUser.email,
+            const createdUser = await userServices.creatUser(newUser);
+            const {id} = createdUser;
+            const photoDir = `users/${id}/photos`;
+            const splitedFile = avatar.name.split(`.`).pop();
+            const photoName = `${uuid}.${splitedFile}`;
 
-            })
-            res.json(newUser);
+            await fsExtra.mkdir(path.resolve(process.cwd(), `public`, photoDir), {recursive: true});
+            await avatar.mv(path.resolve(process.cwd(), `public`, photoDir, photoName));
+            const updatedUser = await userServices.updateUserById(id, {photo: `/${photoDir}/${photoName}`});
+
+            res.json(updatedUser);
             res.end();
+        } catch (e) {
+            console.log(e);
         }
-    catch
-        (e) {
-        res.json(e);
+        res.end();
+    },
+
+    deletePhoto: (req, res, next) => {
+        try {
+            userServices.updateUserById(res.userId, {photo: null});
+        } catch (e) {
+            console.log(e);
+        }
     }
-
-    res.end();
-},
-
 }

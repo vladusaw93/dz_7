@@ -20,5 +20,8 @@ module.exports = {
     [emailEnum.UPDATEPRODUCT]: {
         subject: `[shop] update product`,
         templateFileName: `updateProduct`,
+    },[emailEnum.NOPHOTO]: {
+        subject: `[shop] load photo`,
+        templateFileName: `noPhoto`,
     },
 }
